@@ -1,0 +1,28 @@
+{
+  "name": "bamazon",
+  "version": "1.0.0",
+  "description": "This is a CLI app that allows customers to purchase products. Future releases will also allow managers to include products.",
+  "main": "bamazonCustomer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amandalragone/bamazon.git"
+  },
+  "keywords": [
+    "bamazon",
+    "purchase",
+    "cli_app"
+  ],
+  "author": "Amanda Lamberti Ragone",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/amandalragone/bamazon/issues"
+  },
+  "homepage": "https://github.com/amandalragone/bamazon#readme",
+  "dependencies": {
+    "inquirer": "^6.3.1",
+    "mysql": "^2.17.1"
+  }
+}
