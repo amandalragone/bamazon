@@ -1,6 +1,15 @@
 //Requiring the npm packages installed.
 var mysql = require("mysql");
 var inquirer = require("inquirer");
+var Table = require("cli-table");
+
+// instantiate
+var table = new Table({
+    head: ['Item ID', 'Product Name', 'Department', 'Price', 'Stock Quantity']
+  , colWidths: [20, 20, 20, 20, 20]
+});
+ 
+console.log(table.toString());
 
 //functions
 
@@ -44,12 +53,15 @@ function afterConnecting() {
     connection.query(query, function(err, res) {
 
         if (err) throw err;
-    
-        for (var i = 0; i < res.length; i++) {
-            
-            console.log(res[i].item_id + " || " + res[i].product_name + " || " + res[i].department_name + " || " + res[i].price + " || " + res[i].stock_quantity);
-            
-        };
+
+        res.forEach(function(element) {
+            tableRow = [element.item_id, element.product_name, element.department_name, element.price, element.stock_quantity];
+
+            table.push(tableRow);
+        })
+
+        console.log(table.toString());
+
 
     });
     
