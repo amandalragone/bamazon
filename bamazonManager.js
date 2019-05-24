@@ -43,7 +43,38 @@ function afterConnecting() {
             choices: ["View Products for Sale", "View Low Inventory", "Add to Inventory", "Add New Product", "Exit"]
         }
     ]).then(function(answer){
-        console.log("Ok, you want to " + answer.managerTask);
+
+        switch (answer.managerTask) {
+
+            case "View Products for Sale":
+
+                ViewProducts();
+
+            break;
+
+        }
+
         connection.end();
+    })
+}
+
+function ViewProducts() {
+
+    var query = `
+    SELECT * FROM products
+    `
+
+    connection.query(query, function(err, res) {
+
+        if (err) throw err;
+
+        res.forEach(function(element) {
+            tableRow = [element.item_id, element.product_name, element.department_name, element.price, element.stock_quantity];
+            
+            table.push(tableRow);
+        })
+
+        console.log(table.toString());
+
     })
 }
