@@ -5,21 +5,9 @@ var Table = require("cli-table");
 
 // instantiate
 var table = new Table({
-    head: ['Item ID', 'Product Name', 'Department', 'Price', 'Stock Quantity']
-  , colWidths: [20, 20, 20, 20, 20]
+    head: ['Item ID', 'Product Name', 'Department', 'Price (USD)', 'Stock Quantity']
+  , colWidths: [10, 18, 18, 18, 18]
 });
- 
-console.log(table.toString());
-
-//functions
-
-function Product(item_id, product_name, department_name, price, stock_quantity) {
-    this.item_id = item_id;
-    this.product_name = product_name;
-    this.department_name = department_name;
-    this.price = price;
-    this.stock_quantity = stock_quantity;
-}
 
 //Creating a connection.
 var connection = mysql.createConnection({
@@ -37,9 +25,11 @@ var connection = mysql.createConnection({
   
 //Connecting to the DB.
 connection.connect(function(err) {
+    
     if (err) throw err;
     
     afterConnecting();
+
 });
 
 
@@ -54,18 +44,36 @@ function afterConnecting() {
 
         if (err) throw err;
 
+        var productName = [];
+
         res.forEach(function(element) {
             tableRow = [element.item_id, element.product_name, element.department_name, element.price, element.stock_quantity];
-
+            
             table.push(tableRow);
+
+            productName.push(element.product_name);
         })
 
         console.log(table.toString());
 
+            inquirer.prompt([{
+                name: "userChoice",
+                message: "What product would you like to choose?",
+                type: "rawlist",
+                choices: productName,
+                pageSize: productName.length + 1
+            },
+            {
+                name: "quantity",
+                message: "How many would you like to buy?"
+            }]).then(function(answer){
+                console.log("You've just bought " + answer.quantity + " " + answer.userChoice);
+        
+                connection.end();
+            });
 
     });
     
-
 }
 
 
