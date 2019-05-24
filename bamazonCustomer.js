@@ -4,7 +4,7 @@ var inquirer = require("inquirer");
 var Table = require("cli-table");
 var productName;
 
-// instantiate
+// instantiate Table
 var table = new Table({
     head: ['Item ID', 'Product Name', 'Department', 'Price (USD)', 'Stock Quantity']
   , colWidths: [10, 18, 18, 18, 18]
