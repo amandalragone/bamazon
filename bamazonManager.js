@@ -2,6 +2,7 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 var Table = require("cli-table");
+var productName;
 
 // instantiate Table
 var table = new Table({
@@ -58,12 +59,19 @@ function afterConnecting() {
 
             break;
 
+            case "Add to Inventory":
+
+                addToInventory();
+
+            break;
+
         }
 
-        connection.end();
+        
     })
 }
 
+//If the manager selects "View Products for Sale", this function will run and display all the products contained in the products table.
 function viewProducts() {
 
     var query = `
@@ -83,8 +91,11 @@ function viewProducts() {
         console.log(table.toString());
 
     })
+
+    connection.end();
 }
 
+//If the manager chooses to view low inventory, this function will run and will display all items with stock quantity < 5.
 function viewLowInventory() {
 
     var query = `
@@ -103,4 +114,78 @@ function viewLowInventory() {
 
         console.log(table.toString());
     })
+
+    connection.end();
 }
+
+//If the manager wants to replenish the stock for an existing item, this function will run.
+function addToInventory() {
+
+    //First, the function will check out what are the products available in the products table.
+    var query = `
+    SELECT * FROM products
+    `
+
+    connection.query(query, function(err, res){
+
+        if (err) throw err;
+
+        productName = [];
+
+        res.forEach(function(element){
+            productName.push(element.product_name);
+        });
+
+        //Then, it will ask the manager which of those items need to be updated and how many items should be added to stock.
+        inquirer.prompt([
+            {
+                name: "itemToUpdate",
+                message: "Which item would you like to update?",
+                type: "rawlist",
+                choices: productName,
+                pageSize: productName.length + 1
+            },
+            {
+                name: "itemQuantity",
+                message: "How many items would you like to add?"
+            }
+        ]).then(function(answer){
+    
+            //Then, it will select the specific row where the item is located.
+            var query = `
+            SELECT stock_quantity FROM products WHERE product_name = '${answer.itemToUpdate}';
+            `
+        
+            connection.query(query, function(err, res) {
+                if (err) throw err;
+
+                //Once the row is selected, it will calculate the new quantity in stock and will update that specific row in the table.
+                stockQuantity = parseInt(res[0].stock_quantity);
+
+                console.log(stockQuantity);
+
+                stockTotal = stockQuantity + parseInt(answer.itemQuantity);
+
+                console.log(stockTotal);
+    
+                var query = `
+                UPDATE products SET stock_quantity = '${stockTotal}' WHERE product_name = '${answer.itemToUpdate}';
+                ` 
+                    
+                connection.query(query, function(err, res) {
+                
+                    if (err) throw err;
+    
+                    console.log(res.affectedRows + " products updated!\n");
+                
+                });   
+                connection.end();    
+
+            });
+             
+        });
+
+    });
+    
+}
+
