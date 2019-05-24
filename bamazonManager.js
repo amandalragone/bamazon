@@ -65,9 +65,19 @@ function afterConnecting() {
 
             break;
 
-        }
+            case "Add New Product":
 
-        
+                addNewProduct();
+
+            break;
+
+            case "Exit":
+
+                connection.end();
+            
+            break;
+
+        }  
     })
 }
 
@@ -187,5 +197,42 @@ function addToInventory() {
 
     });
     
+}
+
+//If the manager wants to add a brand new product, this function will run and then update the database.
+function addNewProduct(){
+
+    inquirer.prompt([
+        {
+            name: "product",
+            message: "Which product would you like to add?"
+        },
+        {
+            name: "department",
+            message: "Which department should this product be placed under?"
+        },
+        {
+            name: "price",
+            message: "How much does it cost?"
+        },
+        {
+            name: "stock",
+            message: "How many items would you like to add?"
+        }
+    ]).then(function(answer){
+
+        var query = `
+        INSERT INTO products (product_name, department_name, price, stock_quantity)
+        VALUES ('${answer.product}', '${answer.department}', '${answer.price}', '${answer.stock}')
+        `
+
+        connection.query(query, function(err, res){
+            if(err) throw err;
+
+            console.log(answer.product + " was added successfully to the Database!");
+        });
+        connection.end();
+
+    })
 }
 
