@@ -48,7 +48,13 @@ function afterConnecting() {
 
             case "View Products for Sale":
 
-                ViewProducts();
+                viewProducts();
+
+            break;
+
+            case "View Low Inventory":
+
+                viewLowInventory();
 
             break;
 
@@ -58,7 +64,7 @@ function afterConnecting() {
     })
 }
 
-function ViewProducts() {
+function viewProducts() {
 
     var query = `
     SELECT * FROM products
@@ -76,5 +82,25 @@ function ViewProducts() {
 
         console.log(table.toString());
 
+    })
+}
+
+function viewLowInventory() {
+
+    var query = `
+    SELECT * FROM products WHERE stock_quantity < '5'
+    `
+
+    connection.query(query, function(err, res) {
+
+        if (err) throw err;
+
+        res.forEach(function(element) {
+            tableRow = [element.item_id, element.product_name, element.department_name, element.price, element.stock_quantity];
+
+            table.push(tableRow);
+        })
+
+        console.log(table.toString());
     })
 }
