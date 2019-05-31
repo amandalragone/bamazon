@@ -40,6 +40,7 @@ Phase Five: Allow the manager to create a brand new product in the DB and ensure
 
 <h2>Project Management</h2>
 [Project Board - Customer View](https://github.com/amandalragone/bamazon/projects/1)
+
 [Project Board - Manager View](https://github.com/amandalragone/bamazon/projects/2)
 
 <h2>How to use this app</h2>
@@ -66,7 +67,7 @@ Phase Five: Allow the manager to create a brand new product in the DB and ensure
 
 2. Navigate to the folder where the code is stored. (For example: `cd <Documents>/<my-repository>` )
 
-3. Use the command `node bamazonCustomer.js` to run the Customer View.
+3. Use the command `node bamazonManager.js` to run the Manager View.
 
 4. Select which task you need to perform:
 
