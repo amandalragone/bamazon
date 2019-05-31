@@ -172,11 +172,11 @@ function addToInventory() {
                 //Once the row is selected, it will calculate the new quantity in stock and will update that specific row in the table.
                 stockQuantity = parseInt(res[0].stock_quantity);
 
-                console.log(stockQuantity);
+                console.log("Previous stock quantity: " + stockQuantity);
 
                 stockTotal = stockQuantity + parseInt(answer.itemQuantity);
 
-                console.log(stockTotal);
+                console.log("Stock quantity was updated to: " + stockTotal);
     
                 var query = `
                 UPDATE products SET stock_quantity = '${stockTotal}' WHERE product_name = '${answer.itemToUpdate}';
